@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <!-- Оптимизированный viewport для мобильных устройств: запрет масштабирования для комфортного тач-взаимодействия, но с возможностью ручного масштабирования (пользовательский зуминг разрешён) -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+    <title>Mirage | Студия восточных танцев</title>
+    <!-- Google Fonts для элегантной типографики -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 (free) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #0b0a0f;
+            font-family: 'Inter', sans-serif;
+            color: #ece9e0;
+            line-height: 1.4;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: rgba(198, 161, 91, 0.2); /* улучшение тап-подсветки для мобильных */
+        }
+
+        /* кастомный скролл (работает на десктопе, на мобильных - стандартный но стилизованный) */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e1c24;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c6a15b;
+            border-radius: 8px;
+        }
+
+        /* обертки и сетка */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px; /* уменьшил отступы для маленьких экранов, но оставил воздух */
+        }
+
+        /* необычные элементы - абстрактные орнаменты */
+        .ornament-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.2;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1200"><path fill="none" stroke="%23dbb879" stroke-width="1.2" d="M200 200 L300 150 L400 200 L500 150 L600 200 M250 400 L350 350 L450 400 L550 350 M300 600 L400 550 L500 600 M150 800 L300 750 L450 800 L600 750 M500 1000 L550 950 L600 1000" opacity="0.4"/><circle cx="400" cy="300" r="40" stroke="%23c6a15b" fill="none" stroke-width="1"/><path d="M100 500 L700 500 M400 200 L400 800" stroke="%23c6a15b" stroke-width="0.8" stroke-dasharray="6 6"/></svg>');
+            background-repeat: repeat;
+            background-size: 180px;
+        }
+
+        /* основной контент выше фона */
+        .site-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* header стильный, прозрачный с размытием */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 0 20px;
+            flex-wrap: wrap;
+            gap: 16px;
+            border-bottom: 1px solid rgba(198, 161, 91, 0.25);
+            backdrop-filter: blur(2px);
+        }
+
+        .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem; /* чуть уменьшил для мобильных, но на планшетах норм */
+            font-weight: 600;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, #ecd9b4, #c6a15b);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-transform: uppercase;
+            text-align: center;
+        }
+        .logo span {
+            font-size: 0.8rem;
+            display: block;
+            letter-spacing: 3px;
+            color: #b98f54;
+            background: none;
+            -webkit-background-clip: unset;
+            background-clip: unset;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 28px; /* адаптивный промежуток */
+            list-style: none;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: #f0e7d8;
+            font-weight: 500;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            transition: 0.3s;
+            position: relative;
+            padding: 6px 0; /* увеличим зону тапа */
+            display: inline-block;
+        }
+        .nav-links a:hover {
+            color: #e4bf86;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1.5px;
+            background: #e4bf86;
+            transition: width 0.3s;
+        }
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* hero section - драматично, необычно */
+        .hero {
+            min-height: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 40px;
+            padding: 30px 0 60px;
+        }
+        .hero-text {
+            flex: 1.2;
+        }
+        .hero-badge {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: #c6a15b;
+            margin-bottom: 16px;
+            font-weight: 400;
+        }
+        .hero-text h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.6rem, 8vw, 5rem); /* адаптивный размер шрифта */
+            font-weight: 500;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #fff2e2, #e2c294);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .hero-text p {
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #cfc9bc;
+            max-width: 540px;
+            margin-bottom: 32px;
+        }
+        .btn-group {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 28px;
+            border-radius: 40px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: 0.25s ease;
+            letter-spacing: 0.5px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .btn-primary {
+            background: #c6a15b;
+            color: #0b0a0f;
+            border: 1px solid #c6a15b;
+        }
+        .btn-primary:hover {
+            background: transparent;
+            color: #e4bf86;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(198, 161, 91, 0.2);
+        }
+        .btn-outline {
+            border: 1px solid #c6a15b;
+            color: #e4bf86;
+            background: transparent;
+        }
+        .btn-outline:hover {
+            background: rgba(198, 161, 91, 0.1);
+            transform: translateY(-3px);
+        }
+
+        .hero-media {
+            flex: 1;
+            position: relative;
+            min-width: 240px;
+        }
+        .hero-img {
+            width: 100%;
+            border-radius: 4px 60px 4px 60px;
+            filter: grayscale(0.2) contrast(1.05);
+            box-shadow: 25px 25px 50px rgba(0,0,0,0.5);
+            transition: all 0.5s;
+            display: block;
+        }
+        .hero-img:hover {
+            filter: grayscale(0);
+            transform: scale(1.02);
+        }
+        .floating-element {
+            position: absolute;
+            bottom: -20px;
+            left: -20px;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(198,161,91,0.3) 0%, rgba(0,0,0,0) 70%);
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        /* направления / стили */
+        .section-title {
+            text-align: center;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2rem, 6vw, 3.2rem);
+            font-weight: 500;
+            margin-bottom: 12px;
+        }
+        .section-sub {
+            text-align: center;
+            color: #aa9f89;
+            letter-spacing: 1px;
+            margin-bottom: 40px;
+            font-size: 0.95rem;
+            padding: 0 16px;
+        }
+        .directions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        .direction-card {
+            background: rgba(25, 23, 32, 0.6);
+            backdrop-filter: blur(8px);
+            border-radius: 32px;
+            padding: 28px 20px;
+            transition: all 0.3s;
+            border: 1px solid rgba(198,161,91,0.2);
+            text-align: center;
+        }
+        .direction-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(198,161,91,0.6);
+            background: rgba(30, 28, 38, 0.8);
+            box-shadow: 0 20px 30px -12px rgba(0,0,0,0.5);
+        }
+        .direction-icon {
+            font-size: 2.8rem;
+            color: #c6a15b;
+            margin-bottom: 20px;
+        }
+        .direction-card h3 {
+            font-size: 1.6rem;
+            font-family: 'Cormorant Garamond', serif;
+            margin-bottom: 10px;
+        }
+        .direction-card p {
+            color: #cbc3b2;
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+
+        /* необычный блок с цитатой и атмосферой */
+        .quote-section {
+            margin: 70px 0;
+            padding: 50px 20px;
+            background: linear-gradient(112deg, #121017 0%, #1b1823 100%);
+            border-radius: 80px 20px 80px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .quote-section i {
+            font-size: 2.8rem;
+            color: #c6a15b;
+            opacity: 0.7;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+        .quote-text {
+            font-size: clamp(1.3rem, 5vw, 1.9rem);
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.35;
+            padding: 0 8px;
+        }
+        .quote-author {
+            margin-top: 24px;
+            letter-spacing: 2px;
+            font-weight: 300;
+            color: #b99f6b;
+            font-size: 0.9rem;
+        }
+
+        /* расписание / преподаватели */
+        .instructors {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+            margin: 40px 0 70px;
+        }
+        .instructor-card {
+            background: #131019;
+            border-radius: 48px 16px 48px 16px;
+            width: 260px;
+            padding: 28px 20px;
+            text-align: center;
+            transition: 0.3s;
+            border: 1px solid rgba(198,161,91,0.2);
+        }
+        .instructor-card:hover {
+            border-color: #c6a15b;
+            transform: scale(1.02);
+        }
+        .instructor-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #c6a15b;
+            margin-bottom: 18px;
+            filter: grayscale(0.2);
+        }
+        .instructor-card h4 {
+            font-size: 1.4rem;
+            font-family: 'Cormorant Garamond', serif;
+        }
+        .inst-role {
+            color: #c6a15b;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            margin: 8px 0 12px;
+            letter-spacing: 1px;
+        }
+
+        /* форма связи + необычная сетка */
+        .contact-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            background: rgba(0,0,0,0.35);
+            border-radius: 60px 20px 60px 20px;
+            padding: 40px 24px;
+            margin: 60px 0;
+            backdrop-filter: blur(4px);
+        }
+        .contact-info {
+            flex: 1;
+            min-width: 220px;
+        }
+        .contact-info h3 {
+            font-size: clamp(1.6rem, 5vw, 2rem);
+            font-family: 'Cormorant Garamond', serif;
+            margin-bottom: 24px;
+        }
+        .contact-detail {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            word-break: break-word;
+        }
+        .contact-detail i {
+            font-size: 1.3rem;
+            color: #c6a15b;
+            width: 32px;
+            text-align: center;
+        }
+        .contact-detail span {
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+        .contact-form {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+        .contact-form input, .contact-form textarea {
+            background: rgba(20, 18, 28, 0.9);
+            border: 1px solid #4a3e2c;
+            padding: 14px 18px;
+            border-radius: 40px;
+            color: #f0e7d8;
+            font-family: 'Inter', sans-serif;
+            transition: 0.2s;
+            font-size: 0.95rem;
+            width: 100%;
+        }
+        .contact-form input:focus, .contact-form textarea:focus {
+            outline: none;
+            border-color: #c6a15b;
+            background: #1f1b29;
+        }
+        .contact-form button {
+            background: #c6a15b;
+            border: none;
+            padding: 14px 16px;
+            font-weight: bold;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: 0.2s;
+            color: #0b0a0f;
+        }
+        .contact-form button:hover {
+            background: #dbb163;
+            transform: scale(1.01);
+        }
+
+        /* футер необычный */
+        footer {
+            border-top: 1px solid rgba(198,161,91,0.2);
+            padding: 40px 0 30px;
+            text-align: center;
+            color: #8f866e;
+            font-size: 0.85rem;
+        }
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 28px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .social-icons a {
+            color: #cbc3b2;
+            font-size: 1.6rem;
+            transition: 0.2s;
+            display: inline-block;
+            padding: 6px;
+        }
+        .social-icons a:hover {
+            color: #e4bf86;
+            transform: translateY(-4px);
+        }
+
+        /* анимация появления */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* адаптивные улучшения для мобильных сенсоров */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 18px;
+            }
+            .navbar {
+                flex-direction: column;
+                gap: 14px;
+                padding: 20px 0;
+            }
+            .nav-links {
+                gap: 20px;
+            }
+            .hero-text h1 {
+                margin-bottom: 16px;
+            }
+            .btn {
+                padding: 10px 22px;
+            }
+            .directions-grid {
+                gap: 24px;
+            }
+            .quote-section {
+                margin: 50px 0;
+                padding: 40px 16px;
+            }
+            .contact-section {
+                padding: 32px 18px;
+                gap: 32px;
+            }
+            .contact-detail {
+                gap: 12px;
+            }
+            .instructor-card {
+                width: 100%;
+                max-width: 280px;
+            }
+        }
+
+        /* для очень маленьких экранов (iPhone SE и т.д.) */
+        @media (max-width: 480px) {
+            .hero {
+                padding: 20px 0 40px;
+            }
+            .hero-text p {
+                font-size: 0.95rem;
+            }
+            .btn-group {
+                justify-content: center;
+            }
+            .section-sub {
+                margin-bottom: 30px;
+            }
+            .direction-card {
+                padding: 24px 16px;
+            }
+            .quote-text {
+                font-size: 1.2rem;
+            }
+            .contact-detail span {
+                font-size: 0.85rem;
+            }
+            .contact-form input, .contact-form textarea {
+                padding: 12px 16px;
+            }
+        }
+
+        /* увеличенные области клика для ссылок на мобильных */
+        a, button, .btn {
+            touch-action: manipulation;
+        }
+    </style>
+</head>
+<body>
+<div class="ornament-bg"></div>
+<div class="site-content">
+    <div class="container">
+        <!-- навигация -->
+        <nav class="navbar">
+            <div class="logo">MIRAGE <span>восточная студия</span></div>
+            <ul class="nav-links">
+                <li><a href="#about">О нас</a></li>
+                <li><a href="#directions">Направления</a></li>
+                <li><a href="#teachers">Преподаватели</a></li>
+                <li><a href="#contact">Контакты</a></li>
+            </ul>
+        </nav>
+
+        <!-- Hero -->
+        <section class="hero">
+            <div class="hero-text">
+                <div class="hero-badge">Танец души и ритма</div>
+                <h1>Где восток <br>встречает грацию</h1>
+                <p>Студия Mirage — пространство, где оживают древние традиции восточного танца. Откройте в себе пластичность, женственность и силу через танец живота, фьюжн и современную хореографию.</p>
+                <div class="btn-group">
+                    <a href="#contact" class="btn btn-primary">Записаться на пробный</a>
+                    <a href="#directions" class="btn btn-outline">Узнать стили</a>
+                </div>
+            </div>
+            <div class="hero-media">
+                <!-- улучшен fallback изображения, чтобы не ломалось на мобильных -->
+                <img class="hero-img" src="первое.jpg" alt="Восточный танец" onerror="this.src='https://placehold.co/800x1000/2a242f/e4bf86?text=Mirage+Dance&font=playfair'">
+                <div class="floating-element"></div>
+            </div>
+        </section>
+
+        <!-- about section короткий -->
+        <div id="about" class="fade-up">
+            <div style="text-align: center; margin: 40px 0 20px;">
+                <div class="section-title">Искусство движения</div>
+                <div class="section-sub">Не просто танец — философия тела</div>
+                <p style="max-width: 800px; margin: 0 auto; color: #cfc5b2; line-height: 1.6; padding: 0 12px;">Mirage — это авторская методика, сочетающая классическую школу восточного танца, элементы tribal fusion и работу с энергией. Мы помогаем раскрыть женственность, улучшить осанку и обрести гармонию. Каждое движение становится поэзией.</p>
+            </div>
+        </div>
+
+        <!-- направления / стили -->
+        <div id="directions">
+            <div class="section-title">Наши направления</div>
+            <div class="section-sub">выбери стиль, который откликается сердцу</div>
+            <div class="directions-grid">
+                <div class="direction-card fade-up">
+                    <div class="direction-icon"><i class="fas fa-moon"></i></div>
+                    <h3>Танец живота</h3>
+                    <p>Классический арабский танец: техника дропов, шимми, изоляция. Развивает пластичность и уверенность.</p>
+                </div>
+                <div class="direction-card fade-up">
+                    <div class="direction-icon"><i class="fas fa-feather-alt"></i></div>
+                    <h3>Tribal Fusion</h3>
+                    <p>Смесь восточных мотивов, современных ритмов и уникальной эстетики. Сложная хореография и образность.</p>
+                </div>
+                <div class="direction-card fade-up">
+                    <div class="direction-icon"><i class="fas fa-hand-sparkles"></i></div>
+                    <h3>Саиди & Шааби</h3>
+                    <p>Фольклорные стили с использованием ассист (трость, сагаты). Заряжает энергией и драйвом.</p>
+                </div>
+                <div class="direction-card fade-up">
+                    <div class="direction-icon"><i class="fas fa-dharmachakra"></i></div>
+                    <h3>Духовный танец</h3>
+                    <p>Практика суфийского кружения и медитативных движений. Глубокое внутреннее раскрытие.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- необычный цитатник -->
+        <div class="quote-section fade-up">
+            <i class="fas fa-star-and-crescent"></i>
+            <div class="quote-text">«В каждом жесте — история, в каждом взгляде — ритм. Восточный танец не учат, его чувствуют»</div>
+            <div class="quote-author">— Основатель студии, Диана Винник</div>
+        </div>
+
+        <!-- Преподаватели -->
+        <div id="teachers">
+            <div class="section-title">Наставницы</div>
+            <div class="section-sub">сердце и душа Mirage</div>
+            <div class="instructors">
+                <div class="instructor-card fade-up">
+                    <img class="instructor-img" src="я.jpg" alt="Диана Винник" onerror="this.src='https://placehold.co/300x300/2e2938/c6a15b?text=Leila'">
+                    <h4>Диана Винник</h4>
+                    <div class="inst-role">Основатель, хореограф</div>
+                    <p style="font-size: 0.85rem;">Стаж 12 лет, член международной ассоциации восточного танца. Мастер-классы.</p>
+                </div>
+                <div class="instructor-card fade-up">
+                    <img class="instructor-img" src="второе.jpg" alt="Ульяна Божко" onerror="this.src='https://placehold.co/300x300/2e2938/c6a15b?text=Yasmin'">
+                    <h4>Ульяна Божко</h4>
+                    <div class="inst-role">Tribal Fusion эксперт</div>
+                    <p style="font-size: 0.85rem;">Создательница уникальных перформансов, фьюжн-хореограф, участница международных баттлов.</p>
+                </div>
+                <div class="instructor-card fade-up">
+                    <img class="instructor-img" src="третье.jpg" alt="Виктория Понятовская" onerror="this.src='https://placehold.co/300x300/2e2938/c6a15b?text=Zarina'">
+                    <h4>Виктория Понятовская</h4>
+                    <div class="inst-role">Фольклор & Саиди</div>
+                    <p style="font-size: 0.85rem;">Этнограф танца, преподает технику работы с тростью и сагатами. Энергия и харизма.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- контактная секция необычная -->
+        <div id="contact" class="contact-section fade-up">
+            <div class="contact-info">
+                <h3>Погрузитесь в мир <br>восточной магии</h3>
+                <div class="contact-detail">
+                    <i class="fas fa-location-dot"></i>
+                    <span>Минск, Петра Мстиславца, 15</span>
+                </div>
+                <div class="contact-detail">
+                    <i class="fas fa-phone-alt"></i>
+                    <span>+375293238898</span>
+                </div>
+                <div class="contact-detail">
+                    <i class="fas fa-envelope"></i>
+                    <span>info@mirage-dance.ru</span>
+                </div>
+                <div class="contact-detail">
+                    <i class="fab fa-instagram"></i>
+                    <span>@mirage_dance_studio</span>
+                </div>
+                <div style="margin-top: 28px;">
+                    <p style="font-size: 0.9rem;">✨ Первое занятие — со скидкой 20%</p>
+                </div>
+            </div>
+            <div class="contact-form">
+                <input type="text" placeholder="Ваше имя" id="nameInput">
+                <input type="email" placeholder="Email или телефон" id="contactInput">
+                <textarea rows="3" placeholder="Ваш вопрос или пожелание..."></textarea>
+                <button id="submitContact">Отправить →</button>
+                <p id="formFeedback" style="font-size: 0.8rem; text-align: center; color: #c6a15b;"></p>
+            </div>
+        </div>
+
+        <!-- футер -->
+        <footer>
+            <div class="social-icons">
+                <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" aria-label="Telegram"><i class="fab fa-telegram"></i></a>
+                <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                <a href="#" aria-label="VK"><i class="fab fa-vk"></i></a>
+            </div>
+            <p>© 2026 Студия восточного танца Mirage. Вдохновение востока в каждом движении.</p>
+            <p style="margin-top: 12px;">Сделано с <i class="fas fa-heart" style="color:#c6a15b; font-size: 0.8rem;"></i> для тех, кто ищет гармонию</p>
+        </footer>
+    </div>
+</div>
+
+<script>
+    // плавное появление при скролле
+    const fadeElements = document.querySelectorAll('.fade-up');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if(entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.15 });
+    fadeElements.forEach(el => observer.observe(el));
+
+    // плавный скролл к якорям (мобильная оптимизация)
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            if(href === "#" || href === "") return;
+            const target = document.querySelector(href);
+            if(target) {
+                e.preventDefault();
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                // небольшая коррекция для мобильных браузеров (чтобы не перекрывалось навбаром)
+                setTimeout(() => {
+                    const navHeight = document.querySelector('.navbar')?.offsetHeight || 0;
+                    if(window.scrollY > 0 && navHeight > 40) {
+                        window.scrollBy({ top: -12, behavior: 'smooth' });
+                    }
+                }, 100);
+            }
+        });
+    });
+
+    // простая имитация отправки формы с валидацией
+    const submitBtn = document.getElementById('submitContact');
+    const feedback = document.getElementById('formFeedback');
+    if(submitBtn) {
+        submitBtn.addEventListener('click', () => {
+            const name = document.getElementById('nameInput')?.value.trim();
+            const contact = document.getElementById('contactInput')?.value.trim();
+            if(!name || !contact) {
+                feedback.textContent = 'Пожалуйста, укажите имя и контактные данные ✨';
+                feedback.style.color = '#e4bf86';
+                setTimeout(() => { feedback.textContent = ''; }, 3000);
+                return;
+            }
+            feedback.textContent = 'Благодарим! Мы свяжемся с вами в ближайшее время 🌙';
+            feedback.style.color = '#c6a15b';
+            document.getElementById('nameInput').value = '';
+            document.getElementById('contactInput').value = '';
+            document.querySelector('.contact-form textarea').value = '';
+            setTimeout(() => { feedback.textContent = ''; }, 4000);
+        });
+    }
+
+    // небольшая дополнительная анимация для hero-img (ленивая загрузка)
+    const heroImg = document.querySelector('.hero-img');
+    if(heroImg) {
+        heroImg.setAttribute('loading', 'lazy');
+    }
+</script>
+</body>
+</html>
